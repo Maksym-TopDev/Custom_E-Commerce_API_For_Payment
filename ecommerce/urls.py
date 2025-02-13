@@ -1,5 +1,5 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
@@ -23,6 +23,10 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("users/", include("users.urls")),
+    path("products/", include("products.urls")),
+    path("orders/", include("orders.urls")),
+    path("payments/", include("paymentsurls")),
 
     # token generation url
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
