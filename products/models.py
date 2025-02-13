@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils.timezone import now
 
 # Create your models here.
 class Category(models.Model):
@@ -32,11 +33,29 @@ class Product(models.Model):
     stock = models.PositiveIntegerField()
 
     def update_stock(self, quantity):
+        """ Deduct stock safely using transactions. """
         if self.stock >= quantity:
-            self.stock -= quantity
+            self.stock = models.F("stock") - quantity
             self.save()
             return True
         return False
     
+    def restore_stock(self, quantity):
+        """ Restore stock when an order is canceled. """
+        self.stock = models.F("stock") + quantity
+        self.save()
+    
     def __str__(self):
-        return self.name
+        return f"{self.name} - {self.category.name} | Stock: {self.stock}"
+
+
+class StockLog(models.Model):
+    """Logs stock changes for tracking inventory adjustments."""
+    product = models.ForeignKey("products.Product", on_delete=models.CASCADE)
+    change_type = models.CharField(max_length=50)  # e.g., "Payment Success", "Refund", "Added", "Removed"
+    quantity_changed = models.IntegerField()
+    new_stock_level = models.IntegerField()
+    timestamp = models.DateTimeField(default=now)
+
+    def __str__(self):
+        return f"{self.product.name} - {self.change_type} - {self.quantity_changed} items"
