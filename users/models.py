@@ -34,7 +34,7 @@ class CustomUser(AbstractUser):
     role = models.CharField(max_length=10, choices=ROLE_CHOICES, default="customer")
 
     USERNAME_FIELD = "email"
-    REQUIRED_FILDS = ["username"]
+    REQUIRED_FIELDS = ["username"]
 
     objects = CustomUserManager()
 
@@ -43,8 +43,3 @@ class CustomUser(AbstractUser):
 
     def is_admin(self):
         return self.role == "admin"
-
-
-
-
-
