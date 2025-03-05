@@ -20,12 +20,17 @@ class ProductSerializer(serializers.ModelSerializer):
 
     def validate_name(self, value):
         if len(value) < 3:
-            return serializers.ValidationError("Product name must be at least 3 characters long.")
+            raise serializers.ValidationError("Product name must be at least 3 characters long.")
         return value
 
     class Meta:
         model = Product
         fields = ["id", "name", "description", "category", "category_name", "price", "stock"]
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        data["price"] = f"{instance.price:,.2f}"
+        return data
 
 
 class StockLogSerializer(serializers.ModelSerializer):
