@@ -13,3 +13,10 @@ class StockLogFilter(django_filters.FilterSet):
     class Meta:
         model = StockLog
         fields = ["product", "change_type", "specific_date", "start_date", "end_date"]
+
+"""Routes"""
+# http://localhost:8000/products/stock-logs/?product=1
+# http://localhost:8000/products/stock-logs/?change_type=Stock%20Added
+# http://localhost:8000/products/stock-logs/?date_from=2025-02-20&date_to=2025-02-20
+# http://localhost:8000/products/stock-logs/?change_type=Stock%20Added&date_from=2025-02-20&date_to=2025-02-20
+# 
