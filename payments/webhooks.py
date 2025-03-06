@@ -24,10 +24,17 @@ def stripe_webhook(request):
 
     try:
         # Verify the request is from Stripe
-        event = stripe_webhook.construct_event(payload, sig_header, endpoint_secret)
-    except (ValueError, stripe.error.SignatureVerificationError):
-        logger.error("Invalid webhook signature.")
+        event = stripe.Webhook.construct_event(
+            payload=payload,
+            sig_header=sig_header,
+            secret=endpoint_secret
+        )
+    except stripe.error.SignatureVerificationError as e:
+        logger.error(f"Invalid webhook signature: {str(e)}")
         return JsonResponse({"error": "Invalid webhook signature"}, status=status.HTTP_400_BAD_REQUEST)
+    except ValueError:
+        logger.error("Invalid webhook payload")
+        return JsonResponse({"error": "Invalid webhook payload"}, status=status.HTTP_400_BAD_REQUEST)
 
     # Handle specific Stripe events
     if event["type"] == "payment_intent.succeeded":
