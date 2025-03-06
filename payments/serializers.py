@@ -9,3 +9,7 @@ class PaymentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Payment
         fields = ("id", "order", "stripe_payment_intent", "amount", "status")
+
+    def create(self, validated_data):
+        validated_data.pop("user", None)
+        return Payment.objects.create(**validated_data)
