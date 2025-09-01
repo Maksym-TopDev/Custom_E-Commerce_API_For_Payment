@@ -26,7 +26,7 @@ An E-commerce Django API that supports coupon codes and payment integration usin
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/Mr-waweru/Custom-E-Commerce-API.git
+   git clone https://github.com/Maksym-TopDev/Custom_E-Commerce_API_For_Payment.git
    cd ecommerce
    ```
 
